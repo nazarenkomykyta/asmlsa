@@ -1,10 +1,10 @@
-use std::{fs::{File}, io::{Read}};
+use std::{fs::{self, File}, io::{Write}};
 
-pub fn _READ_ASM_F(f: String) -> [u8; 2048] {
-    let mut d = File::open(f).unwrap();
-    let mut buff_r = [0; 2048];
-    d.read(&mut buff_r).unwrap();
-    buff_r
+pub fn _READ_FILE(f: String) -> String {
+    let y = fs::read_to_string(f);
+    y.unwrap()
 }
 
-
+pub fn _CREATE_FILE(f: String) {
+    let s: File = File::create_new(f).unwrap();
+}
