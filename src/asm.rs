@@ -1,12 +1,15 @@
 use std::vec;
 
-pub const _ASM_COMMANDS_NOARCH_TYPE: [&str; 10] = 
+pub const _ASM_COMMANDS_NOARCH_TYPE: [&str; 17] = 
 ["mov", "inc", "dec", "add", 
-"sub", "mul", "cmp", 
-"syscall", "ret", "xor"];
-pub const _ASM_COMMANDS_X8_TYPE: [&str; 8] = 
+"sub", "mul", "div", "cmp", 
+"syscall", "ret", "xor", "call",
+"jmp", "jz", "jnz", "je", "jne"];
+pub const _ASM_COMMANDS_STACK_TYPE: [&str; 2] = 
+["push", "pop"];
+pub const _ASM_OPERANDS_X8_TYPE: [&str; 8] = // _ASM_COMMANDS_X8_TYPE XDXDXD 
 ["al", "ah", "bl", "bh", "cl", "ch", "dl", "dh"];
-pub const _ASM_COMMANDS_X16_TYPE: [&str; 8] = 
+pub const _ASM_OPERANDS_X16_TYPE: [&str; 8] = 
 ["ax", "bx", "cx", "dx", "sp", "bp", "si", "di"];
 pub const _ASM_OPERANDS_X32_TYPE: [&str; 8] = 
 ["eax", "ebx", "ecx", 
@@ -18,8 +21,6 @@ pub const _ASM_OPERANDS_R_TYPE: [&str; 8] =
 ["r8", "r9", "r10", 
 "r11", "r12", "r13", 
 "r14", "r15"];
-pub const _ASM_COMMANDS_STACK_TYPE: [&str; 2] = 
-["push", "pop"];
 
 pub struct _ASM_STRICT_ALONE {
     coop: Option<String>
