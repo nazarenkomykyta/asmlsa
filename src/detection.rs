@@ -68,6 +68,8 @@ pub fn _ASM_SLICED_IS_NUMERIC_END(l: &Vec<&str>) -> bool {
     or
 } 
 
+
+
 pub fn _BR_ASM_COMPARE_BLOCK(inout: String) {
     let buffer_bytes = _READ_FILE(inout);
     let coll: Vec<&str> = buffer_bytes.split('\n').collect();
@@ -75,8 +77,6 @@ pub fn _BR_ASM_COMPARE_BLOCK(inout: String) {
     for flex in 0..coll.len() {
         h.push(coll[flex].trim().to_string());
     }
-    h.push(h[h.len() - 1].clone().split('\0').collect());
-    h.remove(h.len() - 2);
     for plex in 0..h.len() {
         let mut verifed_finalized: Vec<&str> = Vec::new();
         let ioc = &h[plex];
@@ -97,6 +97,34 @@ pub fn _BR_ASM_COMPARE_BLOCK(inout: String) {
             match fl {
                 _ if fl.contains(&_ASM_COMMANDS_STACK_TYPE[z]) => {
                     verifed_finalized.push(&_ASM_COMMANDS_STACK_TYPE[z]);
+                    if _ASM_SLICED_IS_NUMERIC_END(&fl) {
+                        verifed_finalized.push(fl[fl.len() - 1]);
+                    }
+                }
+                _ => {
+
+                }
+            }
+        }
+        for g in 0.._ASM_OPERANDS_X8_TYPE.len() {
+            match fl {
+                _ if fl.contains(&_ASM_OPERANDS_X8_TYPE[g]) => {
+                    println!("Found X8 bit operand -> {}", _ASM_OPERANDS_X8_TYPE[g]);
+                    verifed_finalized.push(&_ASM_OPERANDS_X8_TYPE[g]);
+                    if _ASM_SLICED_IS_NUMERIC_END(&fl) {
+                        verifed_finalized.push(fl[fl.len() - 1]);
+                    }
+                }
+                _ => {
+
+                }
+            }
+        }
+        for j in 0.. _ASM_OPERANDS_X16_TYPE.len() {
+            match fl {
+                _ if fl.contains(&_ASM_OPERANDS_X16_TYPE[j]) => {
+                    println!("Found X16 bit operand -> {}", _ASM_OPERANDS_X16_TYPE[j]);
+                    verifed_finalized.push(&_ASM_OPERANDS_X16_TYPE[j]);
                     if _ASM_SLICED_IS_NUMERIC_END(&fl) {
                         verifed_finalized.push(fl[fl.len() - 1]);
                     }
@@ -150,9 +178,10 @@ pub fn _BR_ASM_COMPARE_BLOCK(inout: String) {
         }
         println!("{:?}", verifed_finalized);
         println!("{}", verifed_finalized.len());
+        let d = &mut _ASM_STRICT_TRIPLE::new();
+        let h = &mut _ASM_STRICT_DOUBLE::new();
         match verifed_finalized.len() {
             3 => {
-                let d = &mut _ASM_STRICT_TRIPLE::new();
                 println!("{}", _ASM_STRICT_TRIPLE::get_len(d));
                 println!("Len of verifedd_finalized is -> {}",  verifed_finalized.len());
                 _ASM_STRICT_TRIPLE::add_command(
@@ -169,7 +198,6 @@ pub fn _BR_ASM_COMPARE_BLOCK(inout: String) {
                 println!("{:?}", d);
             }
             2 => {
-                let mut h = &mut _ASM_STRICT_DOUBLE::new();
                 _ASM_STRICT_DOUBLE::add_command(
                     h, 
                     verifed_finalized[0].to_string());
