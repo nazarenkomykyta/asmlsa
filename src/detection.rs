@@ -1,5 +1,5 @@
 use crate::asm::*;
-use crate::reader::*;
+use crate::files::*;
 use std::sync::Arc;
 use std::sync::Mutex;
 use std::sync::MutexGuard;
@@ -49,6 +49,17 @@ impl _BLOCK_TO_ANALYZE_ASM_PROC_ENDP {
     }
 }
 
+pub struct _BLOCK_TO_ANALYZE_ASM_INCLUDE {
+    v: Arc<Mutex<_ASM_STRICT_INCLUDE>>
+}
+
+impl _BLOCK_TO_ANALYZE_ASM_INCLUDE {
+    pub fn new(x: String) -> Self {
+        let inc = Arc::new(Mutex::new(_ASM_STRICT_INCLUDE::new(x)));
+        Self { v: inc }
+    }
+}
+
 pub fn _ASM_CUT_LINE_SLICED_SPLIT(l: &str) -> Vec<&str>{
     let y: Vec<&str> = l
         .split(',')
@@ -68,8 +79,6 @@ pub fn _ASM_SLICED_IS_NUMERIC_END(l: &Vec<&str>) -> bool {
     or
 } 
 
-
-
 pub fn _BR_ASM_COMPARE_BLOCK(inout: String) {
     let buffer_bytes = _READ_FILE(inout);
     let coll: Vec<&str> = buffer_bytes.split('\n').collect();
@@ -82,6 +91,18 @@ pub fn _BR_ASM_COMPARE_BLOCK(inout: String) {
         let ioc = &h[plex];
         println!("IOC RN IS -> {}", ioc);
         let fl = _ASM_CUT_LINE_SLICED_SPLIT(&ioc.as_str());
+        match fl {
+            _ if fl.len() == 1 => {
+                if fl[0].len() != 0 {
+                    if fl[0].ends_with(&PROC_ENDP_TERMINATION) {
+                        verifed_finalized.push(fl[0]);
+                    }
+                }
+            }
+            _ => {
+
+            }
+        }
         for t in 0.._ASM_COMMANDS_NOARCH_TYPE.len() {
             match fl {
                 _ if fl.contains(&_ASM_COMMANDS_NOARCH_TYPE[t]) => {
@@ -178,10 +199,9 @@ pub fn _BR_ASM_COMPARE_BLOCK(inout: String) {
         }
         println!("{:?}", verifed_finalized);
         println!("{}", verifed_finalized.len());
-        let d = &mut _ASM_STRICT_TRIPLE::new();
-        let h = &mut _ASM_STRICT_DOUBLE::new();
         match verifed_finalized.len() {
             3 => {
+                let d = &mut _ASM_STRICT_TRIPLE::new();
                 println!("{}", _ASM_STRICT_TRIPLE::get_len(d));
                 println!("Len of verifedd_finalized is -> {}",  verifed_finalized.len());
                 _ASM_STRICT_TRIPLE::add_command(
@@ -198,6 +218,7 @@ pub fn _BR_ASM_COMPARE_BLOCK(inout: String) {
                 println!("{:?}", d);
             }
             2 => {
+                let h: &mut _ASM_STRICT_DOUBLE = &mut _ASM_STRICT_DOUBLE::new();
                 _ASM_STRICT_DOUBLE::add_command(
                     h, 
                     verifed_finalized[0].to_string());
@@ -207,12 +228,12 @@ pub fn _BR_ASM_COMPARE_BLOCK(inout: String) {
                 println!("{:?}", h);
             }
             1 => {
-                let a = _ASM_STRICT_ALONE::new(verifed_finalized[0].to_string());
+                let a: &mut _ASM_STRICT_ALONE = &mut _ASM_STRICT_ALONE::new();
+               _ASM_STRICT_ALONE::add_command(a, verifed_finalized[0].to_string());
+               println!("{:?}", a);
             }
             _ => {
-                // Ok
             }
         }
     }
 }
-
