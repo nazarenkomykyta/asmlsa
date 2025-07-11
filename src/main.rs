@@ -1,5 +1,5 @@
 pub mod asm;
 pub mod detection;
-pub mod reader;
+pub mod files;
 fn main() {
 }
