@@ -1,13 +1,13 @@
 use std::vec;
 
-pub const _ASM_COMMANDS_NOARCH_TYPE: [&str; 17] = 
+pub const _ASM_COMMANDS_NOARCH_TYPE: [&str; 18] = 
 ["mov", "inc", "dec", "add", 
 "sub", "mul", "div", "cmp", 
 "syscall", "ret", "xor", "call",
-"jmp", "jz", "jnz", "je", "jne"];
+"jmp", "jz", "jnz", "je", "jne", "nop"];
 pub const _ASM_COMMANDS_STACK_TYPE: [&str; 2] = 
 ["push", "pop"];
-pub const _ASM_OPERANDS_X8_TYPE: [&str; 8] = // _ASM_COMMANDS_X8_TYPE XDXDXD 
+pub const _ASM_OPERANDS_X8_TYPE: [&str; 8] = 
 ["al", "ah", "bl", "bh", "cl", "ch", "dl", "dh"];
 pub const _ASM_OPERANDS_X16_TYPE: [&str; 8] = 
 ["ax", "bx", "cx", "dx", "sp", "bp", "si", "di"];
@@ -21,14 +21,21 @@ pub const _ASM_OPERANDS_R_TYPE: [&str; 8] =
 ["r8", "r9", "r10", 
 "r11", "r12", "r13", 
 "r14", "r15"];
+pub const PROC_ENDP_TERMINATION: &str = ":";
 
+#[derive(Debug)]
 pub struct _ASM_STRICT_ALONE {
     coop: Option<String>
 }
 
 impl _ASM_STRICT_ALONE {
-    pub fn new(c: String) -> Self {
-        Self { coop: Some(String::from(c)) }
+    pub fn new() -> Self {
+        Self { coop: Some(String::from(String::default())) }
+    }
+    pub fn add_command(v: &mut _ASM_STRICT_ALONE, o: String) {
+        if let Some(u) = v.coop.as_mut() {
+            u.push_str(&o);
+        };
     }
 }
 #[derive(Debug)]
@@ -96,5 +103,12 @@ impl _ASM_STRICT_PROC_ENDP {
     }
 }
 
-pub fn ok_test() {
+pub struct _ASM_STRICT_INCLUDE {
+    inc: Option<String>
+}
+
+impl _ASM_STRICT_INCLUDE {
+    pub fn new(s: String) -> Self {
+        Self { inc: Some(s)}
+    }
 }
